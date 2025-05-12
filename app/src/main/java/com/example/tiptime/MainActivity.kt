@@ -68,64 +68,85 @@ class MainActivity : ComponentActivity() {
 // Función que define el diseño de la pantalla principal usando Jetpack Compose
 @Composable
 fun TipTimeLayout() {
+    // Variable de estado para guardar la entrada del usuario como texto
     var amountInput by remember { mutableStateOf("") }
+
+    // Convierte la entrada a Double si es posible, si no, usa 0.0 como valor por defecto
     val amount = amountInput.toDoubleOrNull() ?: 0.0
+
+    // Calcula la propina usando la función calculateTip
     val tip = calculateTip(amount)
 
+    // Contenedor en columna para organizar los elementos verticalmente
     Column(
         modifier = Modifier
-            .statusBarsPadding()
-            .padding(horizontal = 40.dp)
-            .verticalScroll(rememberScrollState())
-            .safeDrawingPadding(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+            .statusBarsPadding() // Añade espacio para la barra de estado
+            .padding(horizontal = 40.dp) // Padding horizontal de 40dp
+            .verticalScroll(rememberScrollState()) // Habilita scroll si el contenido es largo
+            .safeDrawingPadding(), // Padding seguro para áreas del sistema
+        horizontalAlignment = Alignment.CenterHorizontally, // Centrado horizontal
+        verticalArrangement = Arrangement.Center // Centrado vertical
     ) {
+        // Texto de encabezado: "Calculate Tip"
         Text(
             text = stringResource(R.string.calculate_tip),
             modifier = Modifier
-                .padding(bottom = 16.dp, top = 40.dp)
-                .align(alignment = Alignment.Start)
+                .padding(bottom = 16.dp, top = 40.dp) // Espaciado superior e inferior
+                .align(alignment = Alignment.Start) // Alineación a la izquierda
         )
+
+        // Campo de texto para introducir el monto de la cuenta
         EditNumberField(
-            value = amountInput,
-            onValueChange = { amountInput = it },
+            value = amountInput, // Valor actual del texto
+            onValueChange = { amountInput = it }, // Actualiza la variable de estado
             modifier = Modifier
-                .padding(bottom = 32.dp)
-                .fillMaxWidth()
+                .padding(bottom = 32.dp) // Espaciado inferior
+                .fillMaxWidth() // Ocupa todo el ancho disponible
         )
+
+        // Muestra el resultado de la propina calculada
         Text(
             text = stringResource(R.string.tip_amount, tip),
-            style = MaterialTheme.typography.displaySmall
+            style = MaterialTheme.typography.displaySmall // Aplica estilo de texto del tema
         )
+
+        // Espaciador para dar separación inferior
         Spacer(modifier = Modifier.height(150.dp))
     }
 }
 
 @Composable
 fun EditNumberField(
-    value: String,
-    onValueChange: (String) -> Unit,
-    modifier: Modifier = Modifier
+    value: String, // Valor actual del campo de texto
+    onValueChange: (String) -> Unit, // Función que se llama cuando cambia el texto
+    modifier: Modifier = Modifier // Modificador opcional
 ) {
+    // Campo de texto para ingresar números
     TextField(
-        value = value,
-        onValueChange = onValueChange,
-        singleLine = true,
-        label = { Text(stringResource(R.string.bill_amount)) },
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-        modifier = modifier
+        value = value, // Muestra el texto actual
+        onValueChange = onValueChange, // Actualiza el texto cuando cambia
+        singleLine = true, // Limita a una sola línea
+        label = { Text(stringResource(R.string.bill_amount)) }, // Etiqueta del campo: "Bill Amount"
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number), // Teclado numérico
+        modifier = modifier // Aplica los modificadores recibidos
     )
 }
 
+
 /**
- * Función que calcula la propina según el monto y el porcentaje ingresado.
- * Retorna la propina en formato de moneda local (ej. "$10.00").
+ * Calcula la propina en base al monto ingresado y el porcentaje de propina.
+ * @param amount Monto total de la cuenta.
+ * @param tipPercent Porcentaje de propina a aplicar (por defecto 15%).
+ * @return Una cadena con el valor de la propina formateado en moneda local.
  */
 private fun calculateTip(amount: Double, tipPercent: Double = 15.0): String {
+    // Calcula la propina multiplicando el porcentaje por el monto
     val tip = tipPercent / 100 * amount
+
+    // Formatea la propina como una cadena en formato de moneda (por ejemplo: "$3.00")
     return NumberFormat.getCurrencyInstance().format(tip)
 }
+
 
 // Vista previa del diseño en el editor de Android Studio
 @Preview(showBackground = true)
