@@ -1,3 +1,5 @@
+import org.gradle.kotlin.dsl.debugImplementation
+
 /*
  * Copyright (C) 2023 The Android Open Source Project
  *
@@ -64,7 +66,6 @@ android {
 }
 
 dependencies {
-
     implementation(platform("androidx.compose:compose-bom:2024.12.01"))
     implementation("androidx.activity:activity-compose:1.9.3")
     implementation("androidx.compose.material3:material3")
@@ -82,4 +83,7 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
 
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+    debugImplementation ("androidx.compose.ui:ui-tooling:1.5.1")
+    debugImplementation ("androidx.compose.ui:ui-test-manifest:1.5.1")
+
 }
